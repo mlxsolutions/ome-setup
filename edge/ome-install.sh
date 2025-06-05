@@ -6,25 +6,29 @@ if [ "$(id -u)" -ne 0 ]; then
 	exit 1
 fi
 
-
+# Input arguments
 OME_HOST_IP="$1"
+OME_REDIS_AUTH="$2"
 
-# Check if the required arguments are provided
-if [ -z "$OME_HOST_IP" ]; then
-  echo "Usage: $0 <domain>"
-  echo "Example: $0 example.com"
-  exit 1
-fi
-
+# Static values
 DEPLOY_HOOK="/etc/letsencrypt/renewal-hooks/deploy/ome-reload.sh"
 OME_DOCKER_HOME="/opt/ovenmediaengine"
 OME_LOG_FILE="/opt/ovenmediaengine/logs/ovenmediaengine.log"
+OME_TYPE="edge"
+
+# Check if the required arguments are provided
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 <domain> <redis_auth>"
+  exit 1
+fi
 
 # -- set environment variables if not set --
 echo "✅ Adding environment variables.."
 echo "export OME_DOCKER_HOME=$OME_DOCKER_HOME" >> ~/.bashrc
 echo "export OME_HOST_IP=$OME_HOST_IP" >> ~/.bashrc
 echo "export OME_LOG_FILE=$OME_LOG_FILE" >> ~/.bashrc
+echo "export OME_TYPE=$OME_TYPE" >> ~/.bashrc
+echo "export OME_REDIS_AUTH=$OME_REDIS_AUTH" >> ~/.bashrc
 
 
 # --- open firewall ports ---
@@ -76,7 +80,7 @@ sudo chmod -R 775 "$OME_DOCKER_HOME"
 
 
 # --- Obtain Let's Encrypt Cert ---
-echo "🔐 Requesting Let's Encrypt TLS cert for $OME_..."
+echo "🔐 Requesting Let's Encrypt TLS cert for $OME_HOST_IP..."
 sudo systemctl stop nginx 2>/dev/null || true  # stop nginx if present
 sudo certbot certonly --standalone --non-interactive --agree-tos -m owner@mlx.solutions -d "$OME_HOST_IP"
 
@@ -117,32 +121,25 @@ echo "Copying TLS certs into OME config..."
 cp /etc/letsencrypt/live/$OME_HOST_IP/cert.pem "$OME_DOCKER_HOME/conf/cert.crt"
 cp /etc/letsencrypt/live/$OME_HOST_IP/privkey.pem "$OME_DOCKER_HOME/conf/cert.key"
 cp /etc/letsencrypt/live/$OME_HOST_IP/chain.pem "$OME_DOCKER_HOME/conf/cert.ca-bundle"
-#cp /etc/letsencrypt/live/$OME_DOMAIN/fullchain.pem "$OME_DOCKER_HOME/conf/cert.ca-bundle"
+cp /etc/letsencrypt/live/$OME_HOST_IP/fullchain.pem "$OME_DOCKER_HOME/conf/fullchain.pem"
 chmod 640 "$OME_DOCKER_HOME/conf/cert.key"
 
 # --- fetch the Server.xml and Logger.xml
 echo "📥 Fetching OME config files..."
-curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/conf/origin_server.xml" -o "$OME_DOCKER_HOME/conf/Server.xml"
-curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/conf/logger.xml" -o "$OME_DOCKER_HOME/conf/Logger.xml"
-
-# -- fetch some config scripts --
-curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/scripts/origin/ome-start.sh" -o "./ome-start.sh"
-curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/scripts/ome-stop.sh" -o "./ome-stop.sh"
-curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/scripts/ome-restart.sh" -o "./ome-restart.sh"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/Server.xml" -o "$OME_DOCKER_HOME/conf/Server.xml"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/Logger.xml" -o "$OME_DOCKER_HOME/conf/Logger.xml"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-start.sh" -o "./ome-start.sh"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-stop.sh" -o "./ome-stop.sh"
 # Make scripts executable
 sudo chmod +x ./ome-start.sh
 sudo chmod +x ./ome-stop.sh
-sudo chmod +x ./ome-restart.sh
 
 # --- Copy OME config files from Docker image ---
 sudo docker run -d --name tmp-ome airensoft/ovenmediaengine:latest
-sudo docker cp tmp-ome:/opt/ovenmediaengine/bin/origin_conf/Server.xml $OME_DOCKER_HOME/conf/Server.template.origin.xml
-sudo docker cp tmp-ome:/opt/ovenmediaengine/bin/edge_conf/Server.xml $OME_DOCKER_HOME/conf/Server.template.edge.xml
-sudo docker cp tmp-ome:/opt/ovenmediaengine/bin/origin_conf/Logger.xml $OME_DOCKER_HOME/conf/Logger.xml
-sudo docker rm -f tmp-ome
+sudo docker cp tmp-ome:/opt/ovenmediaengine/bin/${OME_TYPE}_conf/Server.xml $OME_DOCKER_HOME/conf/Server.template.xml
 sudo docker rm -f tmp-ome
 
 # --- END --
 echo "🙌 🎉 Docker, Lets Encrypt and OME installed. "
-echo "You can now start OME with sudo bash ./ome-start.sh"
-s
+echo "Please run 'source ~/.bashrc' to apply the environment variables."
+echo "Thereafter you can now start OME with sudo bash ./ome-start.sh"

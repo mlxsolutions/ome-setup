@@ -17,10 +17,9 @@ sudo rm -f "$OME_LOG_FILE"
 # RUN
 sudo docker run -d --name ome \
   -e OME_HOST_IP="$OME_HOST_IP" \
-  -e OME_ADMISSION_WEBHOOK_SECRET="$OME_ADMISSION_WEBHOOK_SECRET" \
   -e OME_REDIS_AUTH="$OME_REDIS_AUTH" \
-  -e OME_API_ACCESS_PWD="$OME_API_ACCESS_PWD" \
-  -e OME_API_ACCESS_USERID="$OME_API_ACCESS_USERID" \
+  -e OME_ADMISSION_WEBHOOK_SECRET="$OME_ADMISSION_WEBHOOK_SECRET" \
+  -e OME_API_ACCESS_TOKEN="$OME_API_ACCESS_TOKEN" \
   -v "$OME_DOCKER_HOME/conf":/opt/ovenmediaengine/bin/origin_conf \
   -v "$OME_DOCKER_HOME/logs":/var/log/ovenmediaengine \
   -p 1935:1935 \
