@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -e
 # Check if the script is run with root privileges
 if [ "$(id -u)" -ne 0 ]; then
@@ -7,41 +8,20 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 # Input arguments
-OME_HOST_IP="$1"
-OME_REDIS_AUTH="$2"
-OME_ADMISSION_WEBHOOK_SECRET="$3"
-OME_API_ACCESS_TOKEN="$4"
+echo "Checking environment variables...:"
+echo "  OME_HOST_IP=$OME_HOST_IP"
+echo "  OME_REDIS_AUTH=$OME_REDIS_AUTH"
+echo "  OME_ADMISSION_WEBHOOK_SECRET=$OME_ADMISSION_WEBHOOK_SECRET"
+echo "  OME_API_ACCESS_TOKEN=$OME_API_ACCESS_TOKEN"
+echo "  OME_DOCKER_HOME=$OME_DOCKER_HOME"
+echo "  OME_LOG_FILE=$OME_LOG_FILE"
+echo "  OME_TYPE=$OME_TYPE"
 
-# Static values
-DEPLOY_HOOK="/etc/letsencrypt/renewal-hooks/deploy/ome-reload.sh"
-OME_DOCKER_HOME="/opt/ovenmediaengine"
-OME_LOG_FILE="/opt/ovenmediaengine/logs/ovenmediaengine.log"
-OME_TYPE="origin"
-
-# Check if the required arguments are provided
-if [ "$#" -ne 4 ]; then
-  echo "Usage: $0   <domain> <redis_auth> <admission_webhook_secret> <api_access_token>"
+if [ -z "$OME_HOST_IP" ] || [ -z "$OME_REDIS_AUTH" ] || [ -z "$OME_ADMISSION_WEBHOOK_SECRET" ] || [ -z "$OME_API_ACCESS_TOKEN" ]; then
+  echo "❌ Missing required environment variables. Please set OME_HOST_IP, OME_REDIS_AUTH, OME_ADMISSION_WEBHOOK_SECRET, and OME_API_ACCESS_TOKEN."
   exit 1
 fi
 
-
-# -- set environment variables if not set --
-echo "✅ Adding environment variables.."
-# Remove previous block if any
-sed -i '/# OME ENV START/,/# OME ENV END/d' ~/.bashrc
-
-cat >> ~/.bashrc <<EOF
-# OME ENV START
-export OME_DOCKER_HOME=$OME_DOCKER_HOME
-export OME_HOST_IP=$OME_HOST_IP
-export OME_LOG_FILE=$OME_LOG_FILE
-export OME_TYPE=$OME_TYPE
-export OME_REDIS_AUTH=$OME_REDIS_AUTH
-export OME_ADMISSION_WEBHOOK_SECRET=$OME_ADMISSION_WEBHOOK_SECRET
-export OME_API_ACCESS_TOKEN=$OME_API_ACCESS_TOKEN
-# OME ENV END
-EOF
-echo "✅ Environment block added to ~/.bashrc"
 
 
 

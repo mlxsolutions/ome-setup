@@ -6,6 +6,8 @@ if [ "$(id -u)" -ne 0 ]; then
 	exit 1
 fi
 
+source ~/.bashrc
+
 # Input arguments
 OME_HOST_IP="$1"
 OME_REDIS_AUTH="$2"

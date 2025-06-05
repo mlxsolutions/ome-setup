@@ -1,4 +1,5 @@
 #!/bin/bash
+source ~/.bashrc
 
 #PUBLIC_IP=$(curl -s checkip.amazonaws.com | awk '{print $1}')
 #OME_HOST_IP=$(hostname -I | awk '{print $1}')
@@ -11,8 +12,8 @@
 echo "🚀 Launching OvenMediaEngine..."
 
 # clean the log
-sudo cp "$OME_LOG_FILE" "$OME_LOG_FILE.$(date +%Y%m%d%H%M%S)"
-sudo rm -f "$OME_LOG_FILE"
+#sudo cp "$OME_LOG_FILE" "$OME_LOG_FILE.$(date +%Y%m%d%H%M%S)"
+#sudo rm -f "$OME_LOG_FILE"
 
 # RUN
 sudo docker run -d --name ome \

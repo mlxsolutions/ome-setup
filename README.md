@@ -24,23 +24,22 @@ Oven Media Engine Public Repo
 1) `sudo apt-get update`
 
 2) set environment vars
+   
 ```bash
-export OME_HOST_IP="FQDN, NOT THE IP"
-export OME_REDIS_AUTH="myredispassword"
-export OME_ADMISSION_WEBHOOK_SECRET="webhooksecret"
-export OME_API_ACCESS_TOKEN="managedapitoken"
-export OME_TYPE="origin"
-```
-
-3) get the install script and run it
-```bash
-sudo curl -L "https://raw.githubusercontent.com/mlxsolutions/ome-setup/refs/heads/main/origin/ome-install.sh" -o ome-install.sh
-sudo chmod + ome-install.sh
+sudo curl -L "https://raw.githubusercontent.com/mlxsolutions/ome-setup/refs/heads/main/origin/ome-set-env.sh" -o ome-set-env.sh
+sudo chmod +x ome-install.sh
 sudo bash ./ome-install.sh $OME_HOST_IP $OME_REDIS_AUTH $OME_ADMISSION_WEBHOOK_SECRET $OME_API_ACCESS_TOKEN
 ```
 
-4) update environment vars `source ~/.bashrc`
-6) start `sudo bash ./ome-start.sh`
+1) get the install script and run it
+```bash
+sudo curl -L "https://raw.githubusercontent.com/mlxsolutions/ome-setup/refs/heads/main/origin/ome-install.sh" -o ome-install.sh
+sudo chmod +x ome-install.sh
+sudo bash ./ome-install.sh $OME_HOST_IP $OME_REDIS_AUTH $OME_ADMISSION_WEBHOOK_SECRET $OME_API_ACCESS_TOKEN
+```
+
+1) update environment vars `source ~/.bashrc`
+2) start `sudo bash ./ome-start.sh`
 
 ---
 # Edge
