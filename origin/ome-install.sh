@@ -27,13 +27,22 @@ fi
 
 # -- set environment variables if not set --
 echo "✅ Adding environment variables.."
-echo "export OME_DOCKER_HOME=$OME_DOCKER_HOME" >> ~/.bashrc
-echo "export OME_HOST_IP=$OME_HOST_IP" >> ~/.bashrc
-echo "export OME_LOG_FILE=$OME_LOG_FILE" >> ~/.bashrc
-echo "export OME_TYPE=$OME_TYPE" >> ~/.bashrc
-echo "export OME_ADMISSION_WEBHOOK_SECRET=$OME_ADMISSION_WEBHOOK_SECRET" >> ~/.bashrc
-echo "export OME_REDIS_AUTH=$OME_REDIS_AUTH" >> ~/.bashrc
-echo "export OME_API_ACCESS_TOKEN=$OME_API_ACCESS_TOKEN" >> ~/.bashrc
+# Remove previous block if any
+sed -i '/# OME ENV START/,/# OME ENV END/d' ~/.bashrc
+
+cat >> ~/.bashrc <<EOF
+# OME ENV START
+export OME_DOCKER_HOME=$OME_DOCKER_HOME
+export OME_HOST_IP=$OME_HOST_IP
+export OME_LOG_FILE=$OME_LOG_FILE
+export OME_TYPE=$OME_TYPE
+export OME_REDIS_AUTH=$OME_REDIS_AUTH
+export OME_ADMISSION_WEBHOOK_SECRET=$OME_ADMISSION_WEBHOOK_SECRET
+export OME_API_ACCESS_TOKEN=$OME_API_ACCESS_TOKEN
+# OME ENV END
+EOF
+echo "✅ Environment block added to ~/.bashrc"
+
 
 
 # --- open firewall ports ---
