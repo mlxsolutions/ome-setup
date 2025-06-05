@@ -3,27 +3,24 @@
 # --- Run OME Docker container ---
 echo "Checking environment variables...:"
 echo "  OME_HOST_IP=$OME_HOST_IP"
-echo "  OME_REDIS_AUTH=$OME_REDIS_AUTH"
-echo "  OME_ADMISSION_WEBHOOK_SECRET=$OME_ADMISSION_WEBHOOK_SECRET"
 echo "  OME_API_ACCESS_TOKEN=$OME_API_ACCESS_TOKEN"
 echo "  OME_DOCKER_HOME=$OME_DOCKER_HOME"
 echo "  OME_LOG_FILE=$OME_LOG_FILE"
 echo "  OME_TYPE=$OME_TYPE"
 
-if [ -z "$OME_HOST_IP" ] || [ -z "$OME_REDIS_AUTH" ] || [ -z "$OME_ADMISSION_WEBHOOK_SECRET" ] || [ -z "$OME_API_ACCESS_TOKEN" ]; then
-  echo "❌ Missing required environment variables. Please set OME_HOST_IP, OME_REDIS_AUTH, OME_ADMISSION_WEBHOOK_SECRET, and OME_API_ACCESS_TOKEN."
+if [ -z "$OME_HOST_IP" ] || [ -z "$OME_API_ACCESS_TOKEN" ]; then
+  echo "❌ Missing required environment variables. Please set OME_HOST_IP and OME_API_ACCESS_TOKEN."
   exit 1
 fi
 
 # clean the log
 #sudo cp "$OME_LOG_FILE" "$OME_LOG_FILE.$(date +%Y%m%d%H%M%S)"
 #sudo rm -f "$OME_LOG_FILE"
+
 echo "🚀 Launching OvenMediaEngine..."
 # RUN
 sudo docker run -d --name ome \
   -e OME_HOST_IP="$OME_HOST_IP" \
-  -e OME_REDIS_AUTH="$OME_REDIS_AUTH" \
-  -e OME_ADMISSION_WEBHOOK_SECRET="$OME_ADMISSION_WEBHOOK_SECRET" \
   -e OME_API_ACCESS_TOKEN="$OME_API_ACCESS_TOKEN" \
   -v "$OME_DOCKER_HOME/conf":/opt/ovenmediaengine/bin/origin_conf \
   -v "$OME_DOCKER_HOME/logs":/var/log/ovenmediaengine \
@@ -51,5 +48,7 @@ echo "  https://$OME_HOST_IP:3334/<app name>/<stream name>?direction=whip&transp
 echo "Playback:"
 echo "  wss://$OME_HOST_IP:3334/<Application name>/<Stream name>"
 
-sudo tail -f $OME_LOG_FILE
-# https://docs.ovenmediaengine.com/streaming/webrtc-publishing
+echo "Logs:"
+echo "  $OME_LOG_FILE"
+echo "To view logs in real-time, run:"
+echo "  sudo tail -f $OME_LOG_FILE"

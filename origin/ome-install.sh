@@ -10,15 +10,13 @@ fi
 # Input arguments
 echo "Checking environment variables...:"
 echo "  OME_HOST_IP=$OME_HOST_IP"
-echo "  OME_REDIS_AUTH=$OME_REDIS_AUTH"
-echo "  OME_ADMISSION_WEBHOOK_SECRET=$OME_ADMISSION_WEBHOOK_SECRET"
 echo "  OME_API_ACCESS_TOKEN=$OME_API_ACCESS_TOKEN"
 echo "  OME_DOCKER_HOME=$OME_DOCKER_HOME"
 echo "  OME_LOG_FILE=$OME_LOG_FILE"
 echo "  OME_TYPE=$OME_TYPE"
 
-if [ -z "$OME_HOST_IP" ] || [ -z "$OME_REDIS_AUTH" ] || [ -z "$OME_ADMISSION_WEBHOOK_SECRET" ] || [ -z "$OME_API_ACCESS_TOKEN" ]; then
-  echo "❌ Missing required environment variables. Please set OME_HOST_IP, OME_REDIS_AUTH, OME_ADMISSION_WEBHOOK_SECRET, and OME_API_ACCESS_TOKEN."
+if [ -z "$OME_HOST_IP" ] || [ -z "$OME_API_ACCESS_TOKEN" ]; then
+  echo "❌ Missing required environment variables. Please set OME_HOST_IP and OME_API_ACCESS_TOKEN."
   exit 1
 fi
 

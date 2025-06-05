@@ -47,7 +47,7 @@
 	<VirtualHosts>
 		
 		<VirtualHost>
-			<Name>default</Name>
+			<Name>live</Name>
 			<Distribution>mlx.solutions</Distribution>
 			<Host>
 				<Names>
@@ -71,40 +71,7 @@
 				<Url>*</Url>
 			</CrossDomains>
 
-			<!--<Applications>
-				<Application>
-					<Name>*</Name>
-					<Type>live</Type>
-					<OutputProfiles>
-						<OutputProfile>
-							<Name>default</Name>
-							<OutputStreamName>${OriginStreamName}</OutputStreamName>
-							<Encodes>
-								<Video>
-									<Bypass>true</Bypass>
-								</Video>
-								<Audio>
-									<Bypass>true</Bypass>
-								</Audio>
-							</Encodes>
-						</OutputProfile>
-					</OutputProfiles>
-					<Providers>
-						<OVT />
-					</Providers>
-					<Publishers>
-						<AppWorkerCount>1</AppWorkerCount>
-						<StreamWorkerCount>8</StreamWorkerCount>
-						<WebRTC>
-							<Timeout>30000</Timeout>
-							<Rtx>false</Rtx>
-							<Ulpfec>false</Ulpfec>
-							<JitterBuffer>false</JitterBuffer>
-							<CreateDefaultPlaylist>true</CreateDefaultPlaylist>
-						</WebRTC>
-					</Publishers>
-				</Application>
-			</Applications>-->
+		
 		</VirtualHost>
 	</VirtualHosts>
 </Server>

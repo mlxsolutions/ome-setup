@@ -90,9 +90,9 @@
 				<Name>${env:OME_HOST_IP:*}</Name>
 			</Names>
 			<TLS>
-				<CertPath>./cert.crt</CertPath>
-				<KeyPath>./cert.key</KeyPath>
-				<ChainCertPath>./cert.ca-bundle</ChainCertPath>
+				<CertPath>/opt/ovenmediaengine/bin/origin_conf/cert.crt</CertPath>
+				<KeyPath>/opt/ovenmediaengine/bin/origin_conf/cert.key</KeyPath>
+				<ChainCertPath>/opt/ovenmediaengine/bin/origin_conf/cert.ca-bundle</ChainCertPath>
 			</TLS>
 		</Host>
 		<API>
@@ -103,8 +103,7 @@
 		</API>
 	</Managers>
 	
-	<VirtualHosts>
-		<!--<VirtualHost include="VHost*.xml" />-->
+	<!--<VirtualHosts>
 		<VirtualHost>
 			<Name>default</Name>
 			<Distribution>mlx.solutions</Distribution>
@@ -142,9 +141,8 @@
 				<Url>*</Url>
 			</CrossDomains>
 
-			<!-- applications set by API -->
-			
+		
 			
 		</VirtualHost>
-	</VirtualHosts>
+	</VirtualHosts>-->
 </Server>

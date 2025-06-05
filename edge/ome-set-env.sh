@@ -9,10 +9,7 @@ fi
 
 # Input arguments
 OME_HOST_IP="$1"
-OME_API_ACCESS_TOKEN="$2"
-#OME_REDIS_AUTH="$2"
-#OME_ADMISSION_WEBHOOK_SECRET="$3"
-
+OME_REDIS_AUTH="$2"
 
 # Static values
 DEPLOY_HOOK="/etc/letsencrypt/renewal-hooks/deploy/ome-reload.sh"
@@ -21,16 +18,16 @@ OME_LOG_FILE="/opt/ovenmediaengine/logs/ovenmediaengine.log"
 OME_TYPE="origin"
 
 # Check if the required arguments are provided
-if [ "$#" -ne 4 ]; then
-  echo "Usage: $0   <domain> <api_access_token>"
+if [ -z "$OME_HOST_IP" ] || [ -z "$OME_REDIS_AUTH" ]; then
+  echo "❌ Missing required environment variables. Please set OME_HOST_IP, OME_REDIS_AUTH."
   exit 1
 fi
 
 # Define environment variables
 declare -A ENV_VARS=(
   ["OME_HOST_IP"]="$OME_HOST_IP"
+  ["OME_REDIS_AUTH"]="$OME_REDIS_AUTH"
   ["OME_LOG_FILE"]="$OME_LOG_FILE"
-  ["OME_API_ACCESS_TOKEN"]="$OME_API_ACCESS_TOKEN"
   ["OME_TYPE"]="$OME_TYPE"
   ["OME_DOCKER_HOME"]="$OME_DOCKER_HOME"
 )
