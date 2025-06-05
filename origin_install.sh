@@ -122,12 +122,13 @@ chmod 640 "$OME_DOCKER_HOME/conf/cert.key"
 
 # --- fetch the Server.xml and Logger.xml
 echo "📥 Fetching OME config files..."
-curl -L "https://mlxsolutions-pub-conf.s3.eu-west-1.amazonaws.com/ome/$OME_DOMAIN/Server.xml" -o "$OME_DOCKER_HOME/conf/Server.xml"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/conf/origin_server.xml" -o "$OME_DOCKER_HOME/conf/Server.xml"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/conf/logger.xml" -o "$OME_DOCKER_HOME/conf/Logger.xml"
 
 # -- fetch some config scripts --
-curl -L "https://mlxsolutions-pub-conf.s3.eu-west-1.amazonaws.com/ome/scripts/ome-start.sh" -o "./ome-start.sh"
-curl -L "https://mlxsolutions-pub-conf.s3.eu-west-1.amazonaws.com/ome/scripts/ome-stop.sh" -o "./ome-stop.sh"
-curl -L "https://mlxsolutions-pub-conf.s3.eu-west-1.amazonaws.com/ome/scripts/ome-restart.sh" -o "./ome-restart.sh"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/scripts/origin/ome-start.sh" -o "./ome-start.sh"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/scripts/ome-stop.sh" -o "./ome-stop.sh"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/scripts/ome-restart.sh" -o "./ome-restart.sh"
 # Make scripts executable
 sudo chmod +x ./ome-start.sh
 sudo chmod +x ./ome-stop.sh
