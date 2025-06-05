@@ -127,7 +127,8 @@ chmod 640 "$OME_DOCKER_HOME/conf/cert.key"
 # --- fetch the Server.xml and Logger.xml
 echo "📥 Fetching OME config files..."
 curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/Server.xml" -o "$OME_DOCKER_HOME/conf/Server.xml"
-curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/Logger.xml" -o "$OME_DOCKER_HOME/conf/Logger.xml"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/Logger.info.xml" -o "$OME_DOCKER_HOME/conf/Logger.xml"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/Logger.debug.xml" -o "$OME_DOCKER_HOME/conf/Logger.debug.xml"
 curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-start.sh" -o "./ome-start.sh"
 curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-stop.sh" -o "./ome-stop.sh"
 # Make scripts executable
