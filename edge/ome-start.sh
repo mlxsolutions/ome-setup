@@ -38,12 +38,11 @@ sudo docker run -d --name ome \
 
 
 echo "✅ OME is up and running! Check logs with:"
-echo "tail -f $OME_DOCKER_HOME/logs/ovenmediaengine.log"
 echo "Ingress:"
 echo "  wss://$OME_HOST_IP:3334/<app name>/<stream name>?direction=send&transport=tcp"
 echo "  https://$OME_HOST_IP:3334/<app name>/<stream name>?direction=whip&transport=tcp"
 echo "Playback:"
 echo "  wss://$OME_HOST_IP:3334/<Application name>/<Stream name>"
 
-sudo tail -f $OME_DOCKER_HOME/logs/ovenmediaengine.log
+sudo tail -f $OME_LOG_FILE
 # https://docs.ovenmediaengine.com/streaming/webrtc-publishing

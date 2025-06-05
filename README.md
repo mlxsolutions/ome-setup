@@ -14,10 +14,16 @@ Oven Media Engine Public Repo
 `sudo nano $OME_DOCKER_HOME/conf/Server.xml`
 
 `sudo nano $OME_DOCKER_HOME/conf/Logger.xml`
+
+`source ~/.bashrc`
 ---
 # Origin
 
 ## Installation
+
+1) `sudo apt-get update`
+
+2) set environment vars
 ```bash
 export OME_HOST_IP="FQDN, NOT THE IP"
 export OME_REDIS_AUTH="myredispassword"
@@ -26,11 +32,15 @@ export OME_API_ACCESS_TOKEN="managedapitoken"
 export OME_TYPE="origin"
 ```
 
+3) get the install script and run it
 ```bash
 sudo curl -L "https://raw.githubusercontent.com/mlxsolutions/ome-setup/refs/heads/main/origin/ome-install.sh" -o ome-install.sh
 sudo chmod + ome-install.sh
 sudo bash ./ome-install.sh $OME_HOST_IP $OME_REDIS_AUTH $OME_ADMISSION_WEBHOOK_SECRET $OME_API_ACCESS_TOKEN
 ```
+
+4) update environment vars `source ~/.bashrc`
+6) start `sudo bash ./ome-start.sh`
 
 ---
 # Edge
