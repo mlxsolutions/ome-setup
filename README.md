@@ -2,20 +2,23 @@
 Oven Media Engine Public Repo
 
 # Common commands
+```bash
+cd $OME_DOCKER_HOME
+sudo bash ./ome-start.sh
+sudo bash ./ome-stop.sh
+sudo tail -f /opt/ovenmediaengine/logs/ovenmediaengine.log
+sudo curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/Server.xml" -o "$OME_DOCKER_HOME/conf/Server.xml"
+sudo nano $OME_DOCKER_HOME/conf/Server.xml
+sudo nano $OME_DOCKER_HOME/conf/Logger.xml
+source ~/.bashrc
+```
 
-`sudo bash ./ome-start.sh`
+## reload deamon
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart ome.service
+```
 
-`sudo bash ./ome-stop.sh`
-
-`sudo tail -f /opt/ovenmediaengine/logs/ovenmediaengine.log`
-
-`sudo curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/Server.xml" -o "$OME_DOCKER_HOME/conf/Server.xml"`
-
-`sudo nano $OME_DOCKER_HOME/conf/Server.xml`
-
-`sudo nano $OME_DOCKER_HOME/conf/Logger.xml`
-
-`source ~/.bashrc`
 ---
 # Origin
 
@@ -37,7 +40,9 @@ sudo curl -L "https://raw.githubusercontent.com/mlxsolutions/ome-setup/refs/head
 sudo chmod +x ome-install.sh
 sudo bash ./ome-install.sh $OME_HOST_IP $OME_REDIS_AUTH $OME_ADMISSION_WEBHOOK_SECRET $OME_API_ACCESS_TOKEN
 ```
-5) start `sudo bash ./ome-start.sh`
+
+5) start `cd $OME_DOCKER_HOME`
+`sudo bash ./ome-start.sh`
 
 ---
 # Edge

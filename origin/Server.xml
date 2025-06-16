@@ -80,6 +80,12 @@
 				<TLSPort>20081</TLSPort>
 			</Thumbnail>
 
+			<LLHLS>
+				<Port>4333</Port>
+				<TLSPort>4334</TLSPort>
+				<WorkerCount>1</WorkerCount>
+			</LLHLS>
+
 		</Publishers>
 
 	</Bind>

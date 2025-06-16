@@ -2,8 +2,8 @@
 
 # make sure that is not running
 echo "🧹Stopping and removing any existing OME container..."
-sudo docker stop ome
-sudo docker rm ome
+docker stop ome
+docker rm ome
 
 # --- Run OME Docker container ---
 echo "Checking environment variables...:"
@@ -25,7 +25,7 @@ fi
 
 echo "🚀 Launching OvenMediaEngine..."
 # RUN
-sudo docker run -d --name ome \
+docker run -d --name ome \
   -e OME_HOST_IP="$OME_HOST_IP" \
   -e OME_API_ACCESS_TOKEN="$OME_API_ACCESS_TOKEN" \
   -v "$OME_DOCKER_HOME/conf":/opt/ovenmediaengine/bin/origin_conf \
@@ -46,7 +46,6 @@ sudo docker run -d --name ome \
   airensoft/ovenmediaengine:latest
 
 
-
 echo "✅ OME is up and running! Check logs with:"
 echo "Ingress:"
 echo "  wss://$OME_HOST_IP:3334/<app name>/<stream name>?direction=send&transport=tcp"
@@ -58,7 +57,3 @@ echo "Logs:"
 echo "  $OME_LOG_FILE"
 echo "To view logs in real-time, run:"
 echo "  sudo tail -f $OME_LOG_FILE"
-
-if [[ "$1" == "-tail" ]]; then
-  sudo tail -f "$OME_LOG_FILE"
-fi

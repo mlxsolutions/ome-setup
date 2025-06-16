@@ -1,0 +1,17 @@
+[Unit]
+Description=Start OvenMediaEngine Docker container
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+Environment=OME_HOST_IP=live-origin-eu.mlx.solutions
+Environment=OME_API_ACCESS_TOKEN=admin:1920174EFEBC4BFF926CCC4E0744F710E590ABAD8E2E43E2A54B08DA7FD5014D
+Environment=OME_DOCKER_HOME=/opt/ovenmediaengine
+Environment=OME_LOG_FILE=/opt/ovenmediaengine/logs/ovenmediaengine.log
+ExecStart=/opt/ovenmediaengine/ome-start.sh
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target
