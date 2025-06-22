@@ -26,18 +26,20 @@ sudo systemctl status ome.service
 ## Installation
 
 1) `sudo apt-get update`
+`export OME_TYPE=origin`
 
+sudo curl -L "https://raw.githubusercontent.com/mlxsolutions/ome-setup/refs/heads/main/$OME_TYPE/ome-install.sh" -o ome-install.sh
 2) set environment vars
    
 ```bash
-sudo curl -L "https://raw.githubusercontent.com/mlxsolutions/ome-setup/refs/heads/main/origin/ome-set-env.sh" -o ome-set-env.sh
+sudo curl -L "https://raw.githubusercontent.com/mlxsolutions/ome-setup/refs/heads/main/$OME_TYPE/ome-set-env.sh" -o ome-set-env.sh
 sudo chmod +x ome-set-env.sh
 sudo bash ./ome-install.sh $OME_HOST_IP $OME_REDIS_AUTH $OME_ADMISSION_WEBHOOK_SECRET $OME_API_ACCESS_TOKEN
 ```
 3) restart
 4)  get the install script and run it
 ```bash
-sudo curl -L "https://raw.githubusercontent.com/mlxsolutions/ome-setup/refs/heads/main/origin/ome-install.sh" -o ome-install.sh
+sudo curl -L "https://raw.githubusercontent.com/mlxsolutions/ome-setup/refs/heads/main/$OME_TYPE/ome-install.sh" -o ome-install.sh
 sudo chmod +x ome-install.sh
 sudo bash ./ome-install.sh $OME_HOST_IP $OME_REDIS_AUTH $OME_ADMISSION_WEBHOOK_SECRET $OME_API_ACCESS_TOKEN
 ```

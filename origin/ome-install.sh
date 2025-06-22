@@ -20,9 +20,6 @@ if [ -z "$OME_HOST_IP" ] || [ -z "$OME_API_ACCESS_TOKEN" ]; then
   exit 1
 fi
 
-
-
-
 # --- open firewall ports ---
 echo "🔒 Configuring firewall rules..."
 

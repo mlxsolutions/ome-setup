@@ -24,24 +24,6 @@ if [ "$#" -ne 2 ]; then
   exit 1
 fi
 
-# -- set environment variables if not set --
-echo "✅ Adding environment variables.."
-# Remove previous block if any
-sed -i '/# OME ENV START/,/# OME ENV END/d' ~/.bashrc
-
-cat >> ~/.bashrc <<EOF
-# OME ENV START
-export OME_DOCKER_HOME=$OME_DOCKER_HOME
-export OME_HOST_IP=$OME_HOST_IP
-export OME_LOG_FILE=$OME_LOG_FILE
-export OME_TYPE=$OME_TYPE
-export OME_REDIS_AUTH=$OME_REDIS_AUTH
-# OME ENV END
-EOF
-echo "✅ Environment block added to ~/.bashrc"
-
-
-
 # --- open firewall ports ---
 echo "🔒 Configuring firewall rules..."
 

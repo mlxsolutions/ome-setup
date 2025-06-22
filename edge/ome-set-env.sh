@@ -15,7 +15,7 @@ OME_REDIS_AUTH="$2"
 DEPLOY_HOOK="/etc/letsencrypt/renewal-hooks/deploy/ome-reload.sh"
 OME_DOCKER_HOME="/opt/ovenmediaengine"
 OME_LOG_FILE="/opt/ovenmediaengine/logs/ovenmediaengine.log"
-OME_TYPE="origin"
+OME_TYPE="edge"
 
 # Check if the required arguments are provided
 if [ -z "$OME_HOST_IP" ] || [ -z "$OME_REDIS_AUTH" ]; then
