@@ -17,6 +17,7 @@ source ~/.bashrc
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl restart ome.service
+sudo systemctl status ome.service
 ```
 
 ---

@@ -136,15 +136,17 @@ cp /etc/letsencrypt/live/$OME_HOST_IP/fullchain.pem "$OME_DOCKER_HOME/conf/fullc
 chmod 640 "$OME_DOCKER_HOME/conf/cert.key"
 
 # --- fetch the Server.xml and Logger.xml
+# --- fetch the Server.xml and Logger.xml
 echo "📥 Fetching OME config files..."
 curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/Server.xml" -o "$OME_DOCKER_HOME/conf/Server.xml"
 curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/Logger.info.xml" -o "$OME_DOCKER_HOME/conf/Logger.xml"
 curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/Logger.debug.xml" -o "$OME_DOCKER_HOME/conf/Logger.debug.xml"
-curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-start.sh" -o "./ome-start.sh"
-curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-stop.sh" -o "./ome-stop.sh"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-start.sh" -o "$OME_DOCKER_HOME/ome-start.sh"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-stop.sh" -o "$OME_DOCKER_HOME/ome-stop.sh"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-systemd.sh" -o "$OME_DOCKER_HOME/ome-systemd.sh"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-startd.sh" -o "$OME_DOCKER_HOME/ome-startd.sh"
 # Make scripts executable
-sudo chmod +x ./ome-start.sh
-sudo chmod +x ./ome-stop.sh
+sudo chmod +x "$OME_DOCKER_HOME/*.sh"
 
 # --- Copy OME config files from Docker image ---
 sudo docker run -d --name tmp-ome airensoft/ovenmediaengine:latest

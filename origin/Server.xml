@@ -108,6 +108,28 @@
 			</CrossDomains>
 		</API>
 	</Managers>
+
+	<Alert>
+		<Url>https://api.muselink.com/pre/ome/alert"</Url>
+		<SecretKey>IDdtzucPTgbhP5N19wVpE5G4rvs2cVl/D4JuwSioUtI</SecretKey>
+		<Timeout>8000</Timeout>
+		<Rules>
+			<Ingress>
+				<MinBitrate>600000</MinBitrate>
+				<MaxBitrate>6300000</MaxBitrate>
+				<MinFramerate>15</MinFramerate>
+				<MaxFramerate>30</MaxFramerate>
+				<MinWidth>640</MinWidth>
+				<MinHeight>480</MinHeight>
+				<MaxWidth>1920</MaxWidth>
+				<MaxHeight>1080</MaxHeight>
+				<MinSamplerate>16000</MinSamplerate>
+				<MaxSamplerate>50400</MaxSamplerate>
+				<LongKeyFrameInterval />
+				<HasBFrames />
+			</Ingress>
+		</Rules>
+	</Alert>
 	
 	<!--<VirtualHosts>
 		<VirtualHost>

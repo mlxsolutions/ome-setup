@@ -12,6 +12,12 @@ if [ -z "$OME_HOST_IP" ] || [ -z "$OME_REDIS_AUTH" ]; then
   echo "❌ Missing required environment variables. Please set OME_HOST_IP, OME_REDIS_AUTH."
   exit 1
 fi
+
+# make sure that is not running
+echo "🧹Stopping and removing any existing OME container..."
+sudo docker stop ome
+sudo docker rm ome
+
 # --- Run OME Docker container ---
 echo "🚀 Launching OvenMediaEngine..."
 
