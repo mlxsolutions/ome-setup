@@ -146,7 +146,7 @@ curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-stop
 curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-systemd.sh" -o "$OME_DOCKER_HOME/ome-systemd.sh"
 curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-startd.sh" -o "$OME_DOCKER_HOME/ome-startd.sh"
 # Make scripts executable
-sudo chmod +x "$OME_DOCKER_HOME/*.sh"
+sudo chmod +x $OME_DOCKER_HOME/*.sh
 
 # --- Copy OME config files from Docker image ---
 sudo docker run -d --name tmp-ome airensoft/ovenmediaengine:latest
