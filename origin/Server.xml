@@ -11,15 +11,6 @@
 		<HTTP2>
 			<Enable>true</Enable>
 		</HTTP2>
-
-		<LLHLS>
-			<Enable>true</Enable>
-		</LLHLS>
-
-		<P2P>
-			<Enable>false</Enable>
-			<MaxClientPeersPerHostPeer>2</MaxClientPeersPerHostPeer>
-		</P2P>
 	</Modules>
 
 	<Bind>
@@ -33,24 +24,16 @@
 		</Managers>
 	
 		<Providers>
-			<RTMP>
-				<Port>1935</Port>
-				<WorkerCount>1</WorkerCount>
-			</RTMP>
-			<SRT>
-				<Port>9999</Port>
-				<WorkerCount>1</WorkerCount>
-			</SRT>
 			<WebRTC>
 				<Signalling>
 					<Port>3333</Port>
 					<TLSPort>3334</TLSPort>
-					<WorkerCount>1</WorkerCount>
+					<WorkerCount>2</WorkerCount>
 				</Signalling>
 				<IceCandidates>
-					<IceCandidate>${PublicIP}:10000-10004/udp</IceCandidate>
-					<TcpRelay>${PublicIP}:3478</TcpRelay>
-					<TcpForce>true</TcpForce>
+					<IceCandidate>${env:OME_HOST_IP:*}:10000-10004/udp</IceCandidate>
+					<TcpRelay>${env:OME_HOST_IP:*}:3478</TcpRelay>
+					<TcpForce>false</TcpForce>
 					<TcpRelayWorkerCount>1</TcpRelayWorkerCount>
 				</IceCandidates>
 			</WebRTC>
@@ -59,32 +42,13 @@
 		<Publishers>
 			<OVT>
 				<Port>9000</Port>
-				<WorkerCount>1</WorkerCount>
+				<WorkerCount>2</WorkerCount>
 			</OVT>
-			<WebRTC>
-				<Signalling>
-					<Port>3333</Port>
-					<TLSPort>3334</TLSPort>
-					<WorkerCount>1</WorkerCount>
-				</Signalling>
-				<IceCandidates>
-					<IceCandidate>${PublicIP}:10000-10004/udp</IceCandidate>
-					<TcpRelay>${PublicIP}:3478</TcpRelay>
-					<TcpForce>true</TcpForce>
-					<TcpRelayWorkerCount>1</TcpRelayWorkerCount>
-				</IceCandidates>
-			</WebRTC>
-
+			
 			<Thumbnail>
 				<Port>20080</Port>
 				<TLSPort>20081</TLSPort>
 			</Thumbnail>
-
-			<LLHLS>
-				<Port>4333</Port>
-				<TLSPort>4334</TLSPort>
-				<WorkerCount>1</WorkerCount>
-			</LLHLS>
 
 		</Publishers>
 
@@ -130,47 +94,4 @@
 			</Ingress>
 		</Rules>
 	</Alert>
-	
-	<!--<VirtualHosts>
-		<VirtualHost>
-			<Name>default</Name>
-			<Distribution>mlx.solutions</Distribution>
-			<Host>
-				<Names>
-					<Name>${env:OME_HOST_IP:*}</Name>
-				</Names>
-				<TLS>
-					<CertPath>./cert.crt</CertPath>
-					<KeyPath>./cert.key</KeyPath>
-					<ChainCertPath>./cert.ca-bundle</ChainCertPath>
-				</TLS>
-			</Host>
-
-			<AdmissionWebhooks>
-				<ControlServerUrl>https://api.muselink.com/pre/ome/admission/callback</ControlServerUrl>
-				<SecretKey>${env:OME_ADMISSION_WEBHOOK_SECRET}</SecretKey>
-				<Timeout>3000</Timeout>
-				<Enables>
-					<Providers>rtmp,webrtc,srt</Providers>
-					<Publishers>webrtc</Publishers>
-				</Enables>
-			</AdmissionWebhooks>
-			
-			<OriginMapStore>
-				<RedisServer>
-					<Host>live-valkey.mlx.solutions:6379</Host>
-					<Auth>${env:OME_REDIS_AUTH}</Auth>
-				</RedisServer>
-				<OriginHostName>${env:OME_HOST_IP}</OriginHostName>
-			</OriginMapStore>
-			
-
-			<CrossDomains>
-				<Url>*</Url>
-			</CrossDomains>
-
-		
-			
-		</VirtualHost>
-	</VirtualHosts>-->
 </Server>

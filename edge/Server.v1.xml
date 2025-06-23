@@ -9,15 +9,22 @@
 		<HTTP2>
 			<Enable>true</Enable>
 		</HTTP2>
+		<LLHLS>
+			<Enable>true</Enable>
+		</LLHLS>
 		<DynamicAppRemoval>
 			<Enable>false</Enable>
 		</DynamicAppRemoval>
+		<P2P>
+			<Enable>false</Enable>
+			<MaxClientPeersPerHostPeer>2</MaxClientPeersPerHostPeer>
+		</P2P>
 	</Modules>
 
 	<Bind>
 		<Providers>
 			<OVT>
-				<WorkerCount>2</WorkerCount>
+				<WorkerCount>1</WorkerCount>
 			</OVT>
 		</Providers>
 		<Publishers>
@@ -25,15 +32,20 @@
 				<Signalling>
 					<Port>3333</Port>
 					<TLSPort>3334</TLSPort>
-					<WorkerCount>2</WorkerCount>
+					<WorkerCount>1</WorkerCount>
 				</Signalling>
 				<IceCandidates>
-					<IceCandidate>${env:OME_HOST_IP:*}:10000-10004/udp</IceCandidate>
-					<TcpRelay>${env:OME_HOST_IP:*}:3478</TcpRelay>
-					<TcpForce>false</TcpForce>
+					<IceCandidate>${PublicIP}:10000-10004/udp</IceCandidate>
+					<TcpRelay>${PublicIP}:3478</TcpRelay>
+					<TcpForce>true</TcpForce>
 					<TcpRelayWorkerCount>1</TcpRelayWorkerCount>
 				</IceCandidates>
 			</WebRTC>
+			<LLHLS>
+				<Port>4333</Port>
+				<TLSPort>4334</TLSPort>
+				<WorkerCount>1</WorkerCount>
+			</LLHLS>
 		</Publishers>
 	</Bind>
 
@@ -47,33 +59,16 @@
 					<Name>${env:OME_HOST_IP:*}</Name>
 				</Names>
 				<TLS>
-					<CertPath>/opt/ovenmediaengine/bin/origin_conf/cert.crt</CertPath>
-					<KeyPath>/opt/ovenmediaengine/bin/origin_conf/cert.key</KeyPath>
-					<ChainCertPath>/opt/ovenmediaengine/bin/origin_conf/cert.ca-bundle</ChainCertPath>
+					<CertPath>./cert.crt</CertPath>
+					<KeyPath>./cert.key</KeyPath>
+					<ChainCertPath>./cert.ca-bundle</ChainCertPath>
 				</TLS>
 			</Host>
-
-			<!-- <Origins>
-				<Properties>
-					<NoInputFailoverTimeout>3000</NoInputFailoverTimeout>
-					<UnusedStreamDeletionTimeout>60000</UnusedStreamDeletionTimeout>
-				</Properties>
-				<Origin>
-					<Location>/</Location>
-					<Pass>
-						<Scheme>ovt</Scheme>
-						<Urls>
-							<Url>live-origin-eu.mlx.solutions:9000</Url>
-						</Urls>
-					</Pass>
-					<ForwardQueryParams>true</ForwardQueryParams>
-				</Origin>
-			</Origins>-->
 
 			<OriginMapStore>
 				<RedisServer>
 					<Host>live-valkey.mlx.solutions:6379</Host>
-					<Auth>mlx370sameral2l32fv3ubp125</Auth>
+					<Auth>${env:OME_REDIS_AUTH}</Auth>
 				</RedisServer>	
 			</OriginMapStore>
 			

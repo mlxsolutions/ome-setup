@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Server version="8">
+	<Name>ORIGIN</Name>
+	<Type>origin</Type>
+	<IP>*</IP>
+	<PrivacyProtection>false</PrivacyProtection>
+	<StunServer>stun.l.google.com:19302</StunServer>
+
+	<Modules>
+		<HTTP2>
+			<Enable>true</Enable>
+		</HTTP2>
+
+		<LLHLS>
+			<Enable>true</Enable>
+		</LLHLS>
+
+		<P2P>
+			<Enable>false</Enable>
+			<MaxClientPeersPerHostPeer>2</MaxClientPeersPerHostPeer>
+		</P2P>
+	</Modules>
+
+	<Bind>
+
+		<Managers>
+			<API>
+				<Port>8081</Port>
+				<TLSPort>8082</TLSPort>
+				<WorkerCount>1</WorkerCount>
+			</API>
+		</Managers>
+	
+		<Providers>
+			<RTMP>
+				<Port>1935</Port>
+				<WorkerCount>1</WorkerCount>
+			</RTMP>
+			<SRT>
+				<Port>9999</Port>
+				<WorkerCount>1</WorkerCount>
+			</SRT>
+			<WebRTC>
+				<Signalling>
+					<Port>3333</Port>
+					<TLSPort>3334</TLSPort>
+					<WorkerCount>1</WorkerCount>
+				</Signalling>
+				<IceCandidates>
+					<IceCandidate>${PublicIP}:10000-10004/udp</IceCandidate>
+					<TcpRelay>${PublicIP}:3478</TcpRelay>
+					<TcpForce>true</TcpForce>
+					<TcpRelayWorkerCount>1</TcpRelayWorkerCount>
+				</IceCandidates>
+			</WebRTC>
+		</Providers>
+
+		<Publishers>
+			<OVT>
+				<Port>9000</Port>
+				<WorkerCount>1</WorkerCount>
+			</OVT>
+			<WebRTC>
+				<Signalling>
+					<Port>3333</Port>
+					<TLSPort>3334</TLSPort>
+					<WorkerCount>1</WorkerCount>
+				</Signalling>
+				<IceCandidates>
+					<IceCandidate>${PublicIP}:10000-10004/udp</IceCandidate>
+					<TcpRelay>${PublicIP}:3478</TcpRelay>
+					<TcpForce>true</TcpForce>
+					<TcpRelayWorkerCount>1</TcpRelayWorkerCount>
+				</IceCandidates>
+			</WebRTC>
+
+			<Thumbnail>
+				<Port>20080</Port>
+				<TLSPort>20081</TLSPort>
+			</Thumbnail>
+
+			<LLHLS>
+				<Port>4333</Port>
+				<TLSPort>4334</TLSPort>
+				<WorkerCount>1</WorkerCount>
+			</LLHLS>
+
+		</Publishers>
+
+	</Bind>
+
+	<Managers>
+		<Host>
+			<Names>
+				<Name>${env:OME_HOST_IP:*}</Name>
+			</Names>
+			<TLS>
+				<CertPath>/opt/ovenmediaengine/bin/origin_conf/cert.crt</CertPath>
+				<KeyPath>/opt/ovenmediaengine/bin/origin_conf/cert.key</KeyPath>
+				<ChainCertPath>/opt/ovenmediaengine/bin/origin_conf/cert.ca-bundle</ChainCertPath>
+			</TLS>
+		</Host>
+		<API>
+			<AccessToken>${env:OME_API_ACCESS_TOKEN:1234}</AccessToken>
+			<CrossDomains>
+				<Url>*</Url>
+			</CrossDomains>
+		</API>
+	</Managers>
+
+	<Alert>
+		<Url>https://api.muselink.com/pre/ome/alert"</Url>
+		<SecretKey>IDdtzucPTgbhP5N19wVpE5G4rvs2cVl/D4JuwSioUtI</SecretKey>
+		<Timeout>8000</Timeout>
+		<Rules>
+			<Ingress>
+				<MinBitrate>600000</MinBitrate>
+				<MaxBitrate>6300000</MaxBitrate>
+				<MinFramerate>15</MinFramerate>
+				<MaxFramerate>30</MaxFramerate>
+				<MinWidth>640</MinWidth>
+				<MinHeight>480</MinHeight>
+				<MaxWidth>1920</MaxWidth>
+				<MaxHeight>1080</MaxHeight>
+				<MinSamplerate>16000</MinSamplerate>
+				<MaxSamplerate>50400</MaxSamplerate>
+				<LongKeyFrameInterval />
+				<HasBFrames />
+			</Ingress>
+		</Rules>
+	</Alert>
+	
+	<!--<VirtualHosts>
+		<VirtualHost>
+			<Name>default</Name>
+			<Distribution>mlx.solutions</Distribution>
+			<Host>
+				<Names>
+					<Name>${env:OME_HOST_IP:*}</Name>
+				</Names>
+				<TLS>
+					<CertPath>./cert.crt</CertPath>
+					<KeyPath>./cert.key</KeyPath>
+					<ChainCertPath>./cert.ca-bundle</ChainCertPath>
+				</TLS>
+			</Host>
+
+			<AdmissionWebhooks>
+				<ControlServerUrl>https://api.muselink.com/pre/ome/admission/callback</ControlServerUrl>
+				<SecretKey>${env:OME_ADMISSION_WEBHOOK_SECRET}</SecretKey>
+				<Timeout>3000</Timeout>
+				<Enables>
+					<Providers>rtmp,webrtc,srt</Providers>
+					<Publishers>webrtc</Publishers>
+				</Enables>
+			</AdmissionWebhooks>
+			
+			<OriginMapStore>
+				<RedisServer>
+					<Host>live-valkey.mlx.solutions:6379</Host>
+					<Auth>${env:OME_REDIS_AUTH}</Auth>
+				</RedisServer>
+				<OriginHostName>${env:OME_HOST_IP}</OriginHostName>
+			</OriginMapStore>
+			
+
+			<CrossDomains>
+				<Url>*</Url>
+			</CrossDomains>
+
+		
+			
+		</VirtualHost>
+	</VirtualHosts>-->
+</Server>
