@@ -66,7 +66,7 @@
 			</TLS>
 		</Host>
 		<API>
-			<AccessToken>${env:OME_API_ACCESS_TOKEN:1234}</AccessToken>
+			<AccessToken>ome:zdyrv1i9jCyc1+QtR1SYEc1aQA6XUNgxaGn3HSWFFE</AccessToken>
 			<CrossDomains>
 				<Url>*</Url>
 			</CrossDomains>

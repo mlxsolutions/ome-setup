@@ -10,7 +10,10 @@ sudo tail -f /opt/ovenmediaengine/logs/ovenmediaengine.log
 sudo curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/Server.xml" -o "$OME_DOCKER_HOME/conf/Server.xml"
 sudo nano $OME_DOCKER_HOME/conf/Server.xml
 sudo nano $OME_DOCKER_HOME/conf/Logger.xml
+sudo cp $OME_DOCKER_HOME/conf/Server.xml $OME_DOCKER_HOME/conf/Server.bak.20250623
 source ~/.bashrc
+
+redis-cli -h live-valkey.mlx.solutions -p 6379 -a mlx370sameral2l32fv3ubp125
 ```
 
 ## reload deamon
