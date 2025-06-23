@@ -44,6 +44,20 @@
 				<Port>9000</Port>
 				<WorkerCount>2</WorkerCount>
 			</OVT>
+
+			<WebRTC>
+				<Signalling>
+					<Port>3333</Port>
+					<TLSPort>3334</TLSPort>
+					<WorkerCount>1</WorkerCount>
+				</Signalling>
+				<IceCandidates>
+					<IceCandidate>${PublicIP}:10000-10004/udp</IceCandidate>
+					<TcpRelay>${PublicIP}:3478</TcpRelay>
+					<TcpForce>false</TcpForce>
+					<TcpRelayWorkerCount>1</TcpRelayWorkerCount>
+				</IceCandidates>
+			</WebRTC>
 			
 			<Thumbnail>
 				<Port>20080</Port>
@@ -73,7 +87,7 @@
 		</API>
 	</Managers>
 
-	<Alert>
+	<!--<Alert>
 		<Url>https://api.muselink.com/pre/ome/alert"</Url>
 		<SecretKey>IDdtzucPTgbhP5N19wVpE5G4rvs2cVl/D4JuwSioUtI</SecretKey>
 		<Timeout>8000</Timeout>
@@ -93,5 +107,5 @@
 				<HasBFrames />
 			</Ingress>
 		</Rules>
-	</Alert>
+	</Alert>-->
 </Server>
