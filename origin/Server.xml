@@ -49,7 +49,7 @@
 				<Signalling>
 					<Port>3333</Port>
 					<TLSPort>3334</TLSPort>
-					<WorkerCount>1</WorkerCount>
+					<WorkerCount>2</WorkerCount>
 				</Signalling>
 				<IceCandidates>
 					<IceCandidate>${PublicIP}:10000-10004/udp</IceCandidate>
