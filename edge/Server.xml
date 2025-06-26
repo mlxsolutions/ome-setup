@@ -39,11 +39,6 @@
 		</Providers>
 
 		<Publishers>
-			<LLHLS>
-				<Port>4333</Port>
-				<TLSPort>4334</TLSPort>
-				<WorkerCount>1</WorkerCount>
-			</LLHLS>
 			<WebRTC>
 				<Signalling>
 					<Port>3333</Port>
@@ -166,15 +161,6 @@
 							<JitterBuffer>false</JitterBuffer>
 							<CreateDefaultPlaylist>true</CreateDefaultPlaylist>
 						</WebRTC>
-						<LLHLS>
-							<ChunkDuration>0.5</ChunkDuration>
-							<SegmentDuration>6</SegmentDuration>
-							<SegmentCount>10</SegmentCount>
-							<CrossDomains>
-								<Url>*</Url>
-							</CrossDomains>
-							<CreateDefaultPlaylist>true</CreateDefaultPlaylist> <!-- llhls.m3u8 -->
-						</LLHLS>
 					</Publishers>
 				</Application>
 			</Applications>
