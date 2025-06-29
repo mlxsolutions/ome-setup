@@ -17,8 +17,8 @@ OME_LOG_FILE="/opt/ovenmediaengine/logs/ovenmediaengine.log"
 OME_TYPE="edge"
 
 # Check if the required arguments are provided
-if [ -z "$OME_HOST_IP" ] || [ -z "$OME_REDIS_AUTH" ]; then
-  echo "❌ Missing required environment variables. Please set OME_HOST_IP, OME_REDIS_AUTH."
+if [ -z "$OME_HOST_IP" ]; then
+  echo "❌ Missing required environment variables. Please set OME_HOST_IP."
   exit 1
 fi
 
