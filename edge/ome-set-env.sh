@@ -9,7 +9,6 @@ fi
 
 # Input arguments
 OME_HOST_IP="$1"
-OME_REDIS_AUTH="$2"
 
 # Static values
 DEPLOY_HOOK="/etc/letsencrypt/renewal-hooks/deploy/ome-reload.sh"
@@ -26,7 +25,6 @@ fi
 # Define environment variables
 declare -A ENV_VARS=(
   ["OME_HOST_IP"]="$OME_HOST_IP"
-  ["OME_REDIS_AUTH"]="$OME_REDIS_AUTH"
   ["OME_LOG_FILE"]="$OME_LOG_FILE"
   ["OME_TYPE"]="$OME_TYPE"
   ["OME_DOCKER_HOME"]="$OME_DOCKER_HOME"
