@@ -7,8 +7,6 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 
-source ~/.bashrc
-
 # Input arguments
 OME_HOST_IP="$1"
 
