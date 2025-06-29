@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server version="8">
+	<Name>EDGE</Name>
+	<Type>edge</Type>
+	<IP>*</IP>
+	<PrivacyProtection>false</PrivacyProtection>
+	<StunServer>stun.l.google.com:19302</StunServer>
+<Modules>
+		<HTTP2>
+			<Enable>true</Enable>
+		</HTTP2>
+		<LLHLS>
+			<Enable>true</Enable>
+		</LLHLS>
+		<DynamicAppRemoval>
+			<Enable>false</Enable>
+		</DynamicAppRemoval>
+		<!-- P2P works only in WebRTC and is experiment feature -->
+		<P2P>
+			<!-- disabled by default -->
+			<Enable>false</Enable>
+			<MaxClientPeersPerHostPeer>2</MaxClientPeersPerHostPeer>
+		</P2P>
+	</Modules>
+
+	<Bind>
+		<!--<Managers>
+			<API>
+				<Port>8081</Port>
+				<TLSPort>8082</TLSPort>
+				<WorkerCount>1</WorkerCount>
+			</API>
+		</Managers>-->
+
+		<Providers>
+			<OVT>
+				<WorkerCount>1</WorkerCount> 
+			</OVT>
+		</Providers>
+
+		<Publishers>
+			<WebRTC>
+				<Signalling>
+					<Port>3333</Port>
+					<TLSPort>3334</TLSPort>
+					<WorkerCount>1</WorkerCount>
+				</Signalling>
+				<IceCandidates>
+					<IceCandidate>${env:OME_HOST_IP:*}:10005-10009/udp</IceCandidate>
+					<TcpRelay>${env:OME_HOST_IP:*}:3478</TcpRelay>
+					<TcpForce>false</TcpForce>
+					<TcpRelayWorkerCount>1</TcpRelayWorkerCount>
+				</IceCandidates>
+			</WebRTC>
+		</Publishers>
+	</Bind>
+
+	<VirtualHosts>
+		
+		<VirtualHost>
+			<Name>default</Name>
+			<Distribution>mlx.solutions</Distribution>
+			<Host>
+				<Names>
+					<Name>${env:OME_HOST_IP:*}</Name>
+				</Names>
+				<TLS>
+					<CertPath>/opt/ovenmediaengine/bin/origin_conf/cert.crt</CertPath>
+					<KeyPath>/opt/ovenmediaengine/bin/origin_conf/cert.key</KeyPath>
+					<ChainCertPath>/opt/ovenmediaengine/bin/origin_conf/cert.ca-bundle</ChainCertPath>
+				</TLS>
+			</Host>
+
+
+		
+			<!-- Settings for ProxyPass (It can specify origin for each path) -->
+			<Origins>
+				<Properties>
+					<NoInputFailoverTimeout>3000</NoInputFailoverTimeout>
+					<UnusedStreamDeletionTimeout>60000</UnusedStreamDeletionTimeout>
+				</Properties>
+				<Origin>
+					<Location>/</Location>
+					<Pass>
+						<Scheme>ovt</Scheme>
+						<Urls>
+							<Url>live-origin-eu.mlx.solutions:9000/</Url>
+						</Urls>
+						<!-- 
+							Whether to pass the query string to the origin server in the URL the user requested to play (used by some RTSP servers) 
+							default : true
+						-->
+						<ForwardQueryParams>true</ForwardQueryParams>
+					</Pass>
+				</Origin>
+			</Origins>
+
+			<!-- <Origins>
+				<Properties>
+					<NoInputFailoverTimeout>3000</NoInputFailoverTimeout>
+					<UnusedStreamDeletionTimeout>60000</UnusedStreamDeletionTimeout>
+				</Properties>
+				<Origin>
+					<Location>/</Location>
+					<Pass>
+						<Scheme>ovt</Scheme>
+						<Urls>
+							<Url>live-origin-eu.mlx.solutions:9000</Url>
+						</Urls>
+					</Pass>
+					<ForwardQueryParams>true</ForwardQueryParams>
+				</Origin>
+			</Origins>-->
+
+			<!--<OriginMapStore>
+				<RedisServer>
+					<Host>live-valkey.mlx.solutions:6379</Host>
+					<Auth>mlx370sameral2l32fv3ubp125</Auth>
+				</RedisServer>	
+			</OriginMapStore>-->
+			
+			<!-- Default CORS Settings -->
+			<CrossDomains>
+				<Url>*</Url>
+			</CrossDomains>
+
+			<Applications>
+				<Application>
+					<!-- 
+					Origins and OriginMapStore can dynamically create an application if no application exists 
+					when creating a stream. They create a new application by copying the Application configuration 
+					where <Name> is *. 
+					In other words, an application with <Name> as * serves as a dynamic application template.
+					-->
+					<Name>*</Name>
+					<Type>live</Type>
+					<OutputProfiles>
+						<OutputProfile>
+							<Name>passthrough</Name>
+							<OutputStreamName>${OriginStreamName}</OutputStreamName>
+							<Encodes>
+								<Video>
+									<Bypass>true</Bypass>
+								</Video>
+								<Audio>
+									<Bypass>true</Bypass>
+								</Audio>
+							</Encodes>
+						</OutputProfile>
+					</OutputProfiles>
+					<Providers>
+						<OVT />
+					</Providers>
+					<Publishers>
+						<AppWorkerCount>1</AppWorkerCount>
+						<StreamWorkerCount>8</StreamWorkerCount>
+						<WebRTC>
+							<Timeout>30000</Timeout>
+							<Rtx>false</Rtx>
+							<Ulpfec>false</Ulpfec>
+							<JitterBuffer>false</JitterBuffer>
+							<CreateDefaultPlaylist>true</CreateDefaultPlaylist>
+						</WebRTC>
+					</Publishers>
+				</Application>
+			</Applications>
+
+		
+		</VirtualHost>
+	</VirtualHosts>
+</Server>

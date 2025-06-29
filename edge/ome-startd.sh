@@ -1,15 +1,13 @@
 #!/bin/bash
+OME_DOCKER_HOME="/opt/ovenmediaengine"
+OME_LOG_FILE="$OME_DOCKER_HOME/logs/ovenmediaengine.log"
+OME_TYPE="edge"
+
 
 # --- Run OME Docker container ---
 echo "Checking environment variables...:"
-echo "  OME_HOST_IP=$OME_HOST_IP"
-echo "  OME_REDIS_AUTH=$OME_REDIS_AUTH"
-echo "  OME_DOCKER_HOME=$OME_DOCKER_HOME"
-echo "  OME_LOG_FILE=$OME_LOG_FILE"
-echo "  OME_TYPE=$OME_TYPE"
-
-if [ -z "$OME_HOST_IP" ] || [ -z "$OME_REDIS_AUTH" ]; then
-  echo "❌ Missing required environment variables. Please set OME_HOST_IP, OME_REDIS_AUTH."
+if [ -z "$OME_HOST_IP" ] || [ -z "$OME_DOCKER_HOME" ]; then
+  echo "❌ Missing required environment variables. Please set OME_HOST_IP, OME_DOCKER_HOME."
   exit 1
 fi
 
@@ -25,7 +23,6 @@ echo "🚀 Launching OvenMediaEngine..."
 # RUN
 docker run -d --name ome \
   -e OME_HOST_IP="$OME_HOST_IP" \
-  -e OME_REDIS_AUTH="$OME_REDIS_AUTH" \
   -v "$OME_DOCKER_HOME/conf":/opt/ovenmediaengine/bin/origin_conf \
   -v "$OME_DOCKER_HOME/logs":/var/log/ovenmediaengine \
   -p 1935:1935 \
@@ -53,4 +50,5 @@ echo "  wss://$OME_HOST_IP:3334/<Application name>/<Stream name>"
 echo "Logs:"
 echo "  $OME_LOG_FILE"
 echo "To view logs in real-time, run:"
-echo "  tail -f $OME_LOG_FILE"
+echo "  tail -f $OME_DOCKER_HOME/logs/ovenmediaengine.log"
+OME_TYPE="edge"

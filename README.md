@@ -18,7 +18,7 @@ redis-cli -h live-valkey.mlx.solutions -p 6379 -a mlx370sameral2l32fv3ubp125
 
 ## reload deamon
 ```bash
-sudo systemctl daemon-reload
+    sudo systemctl daemon-reload
 sudo systemctl restart ome.service
 sudo systemctl status ome.service
 ```

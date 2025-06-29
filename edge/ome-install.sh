@@ -6,39 +6,39 @@ if [ "$(id -u)" -ne 0 ]; then
 	exit 1
 fi
 
+
 source ~/.bashrc
 
 # Input arguments
 OME_HOST_IP="$1"
-OME_REDIS_AUTH="$2"
 
 # Static values
 DEPLOY_HOOK="/etc/letsencrypt/renewal-hooks/deploy/ome-reload.sh"
 OME_DOCKER_HOME="/opt/ovenmediaengine"
-OME_LOG_FILE="/opt/ovenmediaengine/logs/ovenmediaengine.log"
+OME_LOG_FILE="$OME_DOCKER_HOME/logs/ovenmediaengine.log"
 OME_TYPE="edge"
 
 # Check if the required arguments are provided
-if [ "$#" -ne 2 ]; then
-  echo "Usage: $0 <domain> <redis_auth>"
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $0 <domain> "
   exit 1
 fi
 
 # --- open firewall ports ---
-echo "🔒 Configuring firewall rules..."
+#echo "🔒 Configuring firewall rules..."
 
-sudo ufw allow OpenSSH
-sudo ufw --force enable
+#sudo ufw allow OpenSSH
+#sudo ufw --force enable
 
-for port in 80 443 9000 1935 3333 3334 4334 4333 3478 8081 8082 20080 20081; do
-  sudo ufw allow ${port}/tcp
-done
+#for port in 80 443 9000 1935 3333 3334 4334 4333 3478 8081 8082 20080 20081; do
+#  sudo ufw allow ${port}/tcp
+#done
 
-sudo ufw allow 9999/udp
-sudo ufw allow 4000/udp
-sudo ufw allow 10000:10009/udp
+#sudo ufw allow 9999/udp
+#sudo ufw allow 4000/udp
+#sudo ufw allow 10000:10009/udp
 
-echo "✅ OME ports opened via UFW."
+#echo "✅ OME ports opened via UFW."
 
 
 # --- Install Docker if not present ---
@@ -127,6 +127,7 @@ curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-star
 curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-stop.sh" -o "$OME_DOCKER_HOME/ome-stop.sh"
 curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-systemd.sh" -o "$OME_DOCKER_HOME/ome-systemd.sh"
 curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-startd.sh" -o "$OME_DOCKER_HOME/ome-startd.sh"
+curl -L "https://github.com/mlxsolutions/ome-setup/raw/main/${OME_TYPE}/ome-iptables-open.sh" -o "$OME_DOCKER_HOME/ome-iptables-open.sh"
 # Make scripts executable
 sudo chmod +x $OME_DOCKER_HOME/*.sh
 
@@ -138,4 +139,5 @@ sudo docker rm -f tmp-ome
 # --- END --
 echo "🙌 🎉 Docker, Lets Encrypt and OME installed. "
 echo "Please run 'source ~/.bashrc' to apply the environment variables."
-echo "Thereafter you can now start OME with sudo bash ./ome-start.sh"
+echo "Run sudo ome-systemd.sh to install the OME systemd service."
+

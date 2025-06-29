@@ -1,171 +1,158 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Server version="8">
-	<Name>EDGE</Name>
-	<Type>edge</Type>
-	<IP>*</IP>
-	<PrivacyProtection>false</PrivacyProtection>
-	<StunServer>stun.l.google.com:19302</StunServer>
-<Modules>
-		<HTTP2>
-			<Enable>true</Enable>
-		</HTTP2>
-		<LLHLS>
-			<Enable>true</Enable>
-		</LLHLS>
-		<DynamicAppRemoval>
-			<Enable>false</Enable>
-		</DynamicAppRemoval>
-		<!-- P2P works only in WebRTC and is experiment feature -->
-		<P2P>
-			<!-- disabled by default -->
-			<Enable>false</Enable>
-			<MaxClientPeersPerHostPeer>2</MaxClientPeersPerHostPeer>
-		</P2P>
-	</Modules>
+        <Name>EDGE</Name>
+        <Type>edge</Type>
+        <IP>*</IP>
+        <PrivacyProtection>false</PrivacyProtection>
+        <StunServer>stun.l.google.com:19302</StunServer>
+        <Modules>
+                <HTTP2>
+                        <Enable>true</Enable>
+                </HTTP2>
+                <LLHLS>
+                        <Enable>true</Enable>
+                </LLHLS>
+                <DynamicAppRemoval>
+                        <Enable>false</Enable>
+                </DynamicAppRemoval>
+                <!-- P2P works only in WebRTC and is experiment feature -->
+                <P2P>
+                        <!-- disabled by default -->
+                        <Enable>false</Enable>
+                        <MaxClientPeersPerHostPeer>2</MaxClientPeersPerHostPeer>
+                </P2P>
+        </Modules>
 
-	<Bind>
-		<Managers>
-			<API>
-				<Port>8081</Port>
-				<TLSPort>8082</TLSPort>
-				<WorkerCount>1</WorkerCount>
-			</API>
-		</Managers>
+        <!-- The WorkerCount in <Bind> can set the thread responsible for sending and receiving over the socket.  -->
+        <Bind>
+                <Providers>
+                        <OVT>
+                                <WorkerCount>2</WorkerCount>
+                        </OVT>
+                </Providers>
 
-		<Providers>
-			<OVT>
-				<WorkerCount>1</WorkerCount> 
-			</OVT>
-		</Providers>
+                <Publishers>
+                        <WebRTC>
+                                <Signalling>
+                                        <Port>3333</Port>
+                                        <TLSPort>3334</TLSPort>
+                                        <WorkerCount>2</WorkerCount>
+                                </Signalling>
+                                <IceCandidates>
+                                        <IceCandidate>${env:OME_HOST_IP:*}:10005-10009/udp</IceCandidate>
+                                        <TcpRelay>${env:OME_HOST_IP:*}:3478</TcpRelay>
+                                        <TcpForce>false</TcpForce>
+                                        <TcpRelayWorkerCount>1</TcpRelayWorkerCount>
+                                </IceCandidates>
+                        </WebRTC>
+                </Publishers>
+        </Bind>
 
-		<Publishers>
-			<WebRTC>
-				<Signalling>
-					<Port>3333</Port>
-					<TLSPort>3334</TLSPort>
-					<WorkerCount>1</WorkerCount>
-				</Signalling>
-				<IceCandidates>
-					<IceCandidate>${env:OME_HOST_IP:*}:10005-10009/udp</IceCandidate>
-					<TcpRelay>${env:OME_HOST_IP:*}:3478</TcpRelay>
-					<TcpForce>false</TcpForce>
-					<TcpRelayWorkerCount>1</TcpRelayWorkerCount>
-				</IceCandidates>
-			</WebRTC>
-		</Publishers>
-	</Bind>
+        <VirtualHosts>
 
-	<VirtualHosts>
-		
-		<VirtualHost>
-			<Name>default</Name>
-			<Distribution>mlx.solutions</Distribution>
-			<Host>
-				<Names>
-					<Name>${env:OME_HOST_IP:*}</Name>
-				</Names>
-				<TLS>
-					<CertPath>/opt/ovenmediaengine/bin/origin_conf/cert.crt</CertPath>
-					<KeyPath>/opt/ovenmediaengine/bin/origin_conf/cert.key</KeyPath>
-					<ChainCertPath>/opt/ovenmediaengine/bin/origin_conf/cert.ca-bundle</ChainCertPath>
-				</TLS>
-			</Host>
+                <VirtualHost>
+                        <Name>live</Name>
+                        <Distribution>mlx.solutions</Distribution>
+                        <Host>
+                                <Names>
+                                        <Name>${env:OME_HOST_IP:*}</Name>
+                                </Names>
+                                <TLS>
+                                        <CertPath>/opt/ovenmediaengine/bin/origin_conf/cert.crt</CertPath>
+                                        <KeyPath>/opt/ovenmediaengine/bin/origin_conf/cert.key</KeyPath>
+                                        <ChainCertPath>/opt/ovenmediaengine/bin/origin_conf/cert.ca-bundle</ChainCertPath>
+                                </TLS>
+                        </Host>
+        
+                        <AdmissionWebhooks>
+                                <ControlServerUrl>https://api.muselink.com/pre/ome/admission</ControlServerUrl>
+                                <SecretKey>IDdtzucPTgbhP5N19wVpE5G4rvs2cVl/D4JuwSioUtI</SecretKey>
+                                <Timeout>15000</Timeout>
+                                <Enables>
+                                        <Providers>rtmp,webrtc,srt</Providers>
+                                        <Publishers>webrtc,llhls</Publishers>
+                                </Enables>
+                        </AdmissionWebhooks>
+
+                        <Origins>
+                                <Properties>
+                                        <NoInputFailoverTimeout>3000</NoInputFailoverTimeout>
+                                        <UnusedStreamDeletionTimeout>60000</UnusedStreamDeletionTimeout>
+                                </Properties>
+                                <Origin>
+                                        <Location>/</Location>
+                                        <Pass>
+                                                <Scheme>ovt</Scheme>
+                                                <Urls>
+                                                        <Url>live-origin-eu.mlx.solutions:9000/</Url>
+                                                </Urls>
+                                                <ForwardQueryParams>true</ForwardQueryParams>
+                                        </Pass>
+                                </Origin>
+                        </Origins>
 
 
-		
-			<!-- Settings for ProxyPass (It can specify origin for each path) -->
-			<Origins>
-				<Properties>
-					<NoInputFailoverTimeout>3000</NoInputFailoverTimeout>
-					<UnusedStreamDeletionTimeout>60000</UnusedStreamDeletionTimeout>
-				</Properties>
-				<Origin>
-					<Location>/</Location>
-					<Pass>
-						<Scheme>ovt</Scheme>
-						<Urls>
-							<Url>live-origin-eu.mlx.solutions:9000/</Url>
-						</Urls>
-						<!-- 
-							Whether to pass the query string to the origin server in the URL the user requested to play (used by some RTSP servers) 
-							default : true
-						-->
-						<ForwardQueryParams>true</ForwardQueryParams>
-					</Pass>
-				</Origin>
-			</Origins>
+                        <CrossDomains>
+                                <Url>*</Url>
+                        </CrossDomains>
 
-			<!-- <Origins>
-				<Properties>
-					<NoInputFailoverTimeout>3000</NoInputFailoverTimeout>
-					<UnusedStreamDeletionTimeout>60000</UnusedStreamDeletionTimeout>
-				</Properties>
-				<Origin>
-					<Location>/</Location>
-					<Pass>
-						<Scheme>ovt</Scheme>
-						<Urls>
-							<Url>live-origin-eu.mlx.solutions:9000</Url>
-						</Urls>
-					</Pass>
-					<ForwardQueryParams>true</ForwardQueryParams>
-				</Origin>
-			</Origins>-->
+                        <Applications>
+                                <Application>
+                                        <Name>*</Name>
+                                        <Type>live</Type>
+                                        <OutputProfiles>
+                                                <OutputProfile>
+                                                        <Name>passthrough</Name>
+                                                        <OutputStreamName>${OriginStreamName}</OutputStreamName>
+                                                        <Encodes>
+                                                                <Video>
+                                                                        <Bypass>true</Bypass>
+                                                                </Video>
+                                                                <Audio>
+                                                                        <Bypass>true</Bypass>
+                                                                </Audio>
+                                                        </Encodes>
+                                                </OutputProfile>
+                                        </OutputProfiles>
+                                        <Providers>
+                                                <OVT />
+                                        </Providers>
+                                        <Publishers>
 
-			<!--<OriginMapStore>
-				<RedisServer>
-					<Host>live-valkey.mlx.solutions:6379</Host>
-					<Auth>mlx370sameral2l32fv3ubp125</Auth>
-				</RedisServer>	
-			</OriginMapStore>-->
-			
-			<!-- Default CORS Settings -->
-			<CrossDomains>
-				<Url>*</Url>
-			</CrossDomains>
+                                                <!-- Publisher's AppWorkerCount allows you to set the number of threads used for per-stream processing 
+                                                such as RTP packaging  
+                                                
+                                                It is recommended that this value does not exceed the number of CPU cores.
+                                                -->
+                                                <AppWorkerCount>1</AppWorkerCount>
 
-			<Applications>
-				<Application>
-					<!-- 
-					Origins and OriginMapStore can dynamically create an application if no application exists 
-					when creating a stream. They create a new application by copying the Application configuration 
-					where <Name> is *. 
-					In other words, an application with <Name> as * serves as a dynamic application template.
-					-->
-					<Name>*</Name>
-					<Type>live</Type>
-					<OutputProfiles>
-						<OutputProfile>
-							<Name>passthrough</Name>
-							<OutputStreamName>${OriginStreamName}</OutputStreamName>
-							<Encodes>
-								<Video>
-									<Bypass>true</Bypass>
-								</Video>
-								<Audio>
-									<Bypass>true</Bypass>
-								</Audio>
-							</Encodes>
-						</OutputProfile>
-					</OutputProfiles>
-					<Providers>
-						<OVT />
-					</Providers>
-					<Publishers>
-						<AppWorkerCount>1</AppWorkerCount>
-						<StreamWorkerCount>8</StreamWorkerCount>
-						<WebRTC>
-							<Timeout>30000</Timeout>
-							<Rtx>false</Rtx>
-							<Ulpfec>false</Ulpfec>
-							<JitterBuffer>false</JitterBuffer>
-							<CreateDefaultPlaylist>true</CreateDefaultPlaylist>
-						</WebRTC>
-					</Publishers>
-				</Application>
-			</Applications>
+                                                <!-- StreamWorkerCount 
+                                                        StreamWorkerCount allows you to set the number of threads for per-session processing such as SRTP encryption.
 
-		
-		</VirtualHost>
-	</VirtualHosts>
+                                                        It may be impossible to send data to thousands of viewers in one thread. 
+                                                        StreamWorkerCount allows sessions to be distributed across multiple threads and transmitted simultaneously.
+                                                        This means that resources required for SRTP encryption of WebRTC or TLS encryption of HLS/DASH can be distributed and processed by multiple threads.
+                                                        It is recommended that this value not exceed the number of CPU cores.
+
+                                                        when scaling out a stream to many viewers, the StreamWorker process will consume a lot of CPU.
+                                                        If you have this limited to 4 threads you should increase that number.
+                                                        The higher your overall throughput, the more CPU will be consumed.
+                                                        Use 'top' to get the PID of OvenMediaEngine,
+                                                        then run 'top -H -p {OME PID}' to see the individual thread usage.
+                                                        The StreamWorker threads should never sit above 75% max in my experience, to accommodate spikes in traffic.
+                                                        Given the bitrate you indicated, my gut feeling is that this is the root cause of your issue.
+                                                -->
+                                                <StreamWorkerCount>6</StreamWorkerCount>
+                                                <WebRTC>
+                                                        <Timeout>30000</Timeout>
+                                                        <Rtx>false</Rtx>
+                                                        <Ulpfec>false</Ulpfec>
+                                                        <JitterBuffer>false</JitterBuffer>
+                                                        <CreateDefaultPlaylist>false</CreateDefaultPlaylist>
+                                                </WebRTC>
+                                        </Publishers>
+                                </Application>
+                        </Applications>
+                </VirtualHost>
+        </VirtualHosts>
 </Server>

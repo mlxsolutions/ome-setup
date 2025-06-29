@@ -3,6 +3,18 @@
 
 set -e
 
+OME_DOCKER_HOME="/opt/ovenmediaengine"
+OME_LOG_FILE="$OME_DOCKER_HOME/logs/ovenmediaengine.log"
+OME_TYPE="edge"
+OME_HOST_IP="$1"
+
+# Check if the required arguments are provided
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $0 <domain> "
+  exit 1
+fi
+
+
 # --- Setup systemd service for OME ---
 echo "🛠️ Setting up systemd service for OME..."
 
@@ -17,9 +29,7 @@ Requires=docker.service
 Type=oneshot
 RemainAfterExit=true
 Environment=OME_HOST_IP=$OME_HOST_IP
-Environment=OME_REDIS_AUTH=$OME_REDIS_AUTH
 Environment=OME_DOCKER_HOME=$OME_DOCKER_HOME
-Environment=OME_LOG_FILE=$OME_LOG_FILE
 ExecStart=$OME_DOCKER_HOME/ome-startd.sh
 TimeoutStartSec=0
 
